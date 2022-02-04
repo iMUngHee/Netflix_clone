@@ -5,6 +5,7 @@ import { createGlobalStyle, ThemeProvider } from "styled-components";
 import App from "./App";
 import { theme } from "./theme/theme";
 import "./theme/fonts.css";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -36,7 +37,8 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Netflix_Sans', 'Roboto', sans-serif;
     font-weight: 400;
     line-height: 1.2;
-    color: black;
+    background-color: black;
+    color: white;
   }
   ol, ul {
     list-style: none;
@@ -62,13 +64,17 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const client = new QueryClient();
+
 ReactDOM.render(
   <React.StrictMode>
     <HelmetProvider>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <App />
-      </ThemeProvider>
+      <QueryClientProvider client={client}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <App />
+        </ThemeProvider>
+      </QueryClientProvider>
     </HelmetProvider>
   </React.StrictMode>,
   document.getElementById("root")
