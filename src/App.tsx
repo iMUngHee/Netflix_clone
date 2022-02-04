@@ -6,16 +6,14 @@ import Tv from "./routes/Tv";
 
 const App = () => {
   return (
-    <>
-    <Header />
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/tv" element={<Tv />} />
         <Route path="/search" element={<Search />} />
       </Routes>
     </BrowserRouter>
-    </>
   );
 };
 
