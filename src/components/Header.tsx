@@ -1,91 +1,8 @@
 import { motion, useAnimation, useViewportScroll } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Link, useMatch } from "react-router-dom";
-import styled from "styled-components";
-
-const Nav = styled(motion.nav)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  font-size: 14px;
-  padding: 20px 60px;
-`;
-
-const Col = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const Logo = styled(motion.svg)`
-  margin-right: 50px;
-  width: 95px;
-  height: 25px;
-  fill: ${(props) => props.theme.red.darker};
-  path {
-    stroke-width: 6px;
-    stroke: ${(props) => props.theme.red.lighter};
-  }
-`;
-
-const Items = styled.ul`
-  display: flex;
-  align-items: center;
-`;
-
-const Item = styled.li`
-  margin-right: 20px;
-  color: ${(props) => props.theme.white.darker};
-  transition: color 0.3s ease-in-out;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  &:hover {
-    color: ${(props) => props.theme.white.lighter};
-  }
-`;
-
-const Search = styled.span`
-  color: white;
-  display: flex;
-  align-items: center;
-  position: relative;
-  svg {
-    height: 25px;
-  }
-`;
-
-const Input = styled(motion.input)`
-  position: absolute;
-  transform-origin: right center;
-  right: 0px;
-  padding: 8px 10px;
-  padding-left: 40px;
-  width: 240px;
-  z-index: -1;
-  color: white;
-  font-size: 14px;
-  background-color: rgba(0, 0, 0, 0.7);
-  border: 1px solid ${(props) => props.theme.white.lighter};
-  &::placeholder {
-    color: rgba(229 ,229, 229, 0.6);
-  }
-`;
-
-const Circle = styled(motion.span)`
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  border-radius: 2.5px;
-  bottom: -8px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  background-color: ${(props) => props.theme.white.lighter};
-`;
+import { useForm } from "react-hook-form";
+import { Link, useMatch, useNavigate } from "react-router-dom";
+import { Circle, Col, Items, Item ,Logo, Nav, Input, Search } from "./style/Hearder.style";
 
 const logoVariants = {
   normal: {
@@ -108,6 +25,10 @@ const navVariants = {
   },
 };
 
+interface IForm {
+  keyword: string;
+}
+
 const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const inputAnimation = useAnimation();
@@ -115,6 +36,8 @@ const Header = () => {
   const { scrollY } = useViewportScroll();
   const homeMatch = useMatch("/");
   const tvMatch = useMatch("/tv");
+  const navigate = useNavigate();
+  const {register, handleSubmit} = useForm<IForm>();
   const toggleSearch = () => {
     if (searchOpen) {
       inputAnimation.start({
@@ -134,6 +57,9 @@ const Header = () => {
       }
     });
   }, [scrollY, navAnimation]);
+  const onValid = ({keyword}: IForm) => {
+    navigate(`/search?keyword=${keyword}`);
+  }
   return (
     <Nav
       variants={navVariants}
@@ -167,7 +93,7 @@ const Header = () => {
         </Items>
       </Col>
       <Col>
-        <Search>
+        <Search onSubmit={handleSubmit(onValid)}>
           <motion.svg
             onClick={toggleSearch}
             animate={{ x: searchOpen ? -210 : 0 }}
@@ -187,6 +113,7 @@ const Header = () => {
             initial={{ scaleX: 0 }}
             transition={{ type: "linear" }}
             placeholder="제목, 사람, 장르"
+            {...register("keyword", {required: true, minLength: 2})}
           />
         </Search>
       </Col>

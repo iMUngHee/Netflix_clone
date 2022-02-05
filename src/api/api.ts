@@ -20,13 +20,14 @@ export interface IGetMoviesResult {
   total_results: number;
 }
 
-// export const getMovies = () => {
-//   return fetch(
-//     `https://api.themoviedb.org/3/movie/550?api_key=55b1039fe0286596ce8075f0d6b12d9c`
-//   ).then((response) => response.json());
-// };
-export const getMovies = () => {
+export const getMoviesNowPlaying = () => {
   return fetch(
     `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
+  ).then((response) => response.json());
+};
+
+export const getMoviesPopular = () => {
+  return fetch(
+    `${BASE_PATH}/movie/popular?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
   ).then((response) => response.json());
 };
