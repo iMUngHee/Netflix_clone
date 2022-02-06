@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { getMoviesPopular, IGetMoviesResult } from "../api/api";
+import { getMoviesLatest, getMoviesTopRated, getMoviesUpcoming, IGetMoviesResult } from "../api/api";
 import Banner from "../components/Banner";
 import Modal from "../components/Modal";
 import Slider from "../components/Slider";
@@ -19,19 +19,31 @@ const Loader = styled.div`
 `;
 
 const Home = () => {
-  const { data, isLoading } = useQuery<IGetMoviesResult>(
-    ["movies", "nowPlaying"],
-    getMoviesPopular
+  const { data: topRated, isLoading } = useQuery<IGetMoviesResult>(
+    ["movies", "TopRated"],
+    getMoviesTopRated
   );
+  const { data: Latest, isLoading: isLoading2} = useQuery<IGetMoviesResult>(
+    ["movies", "Latest"],
+    getMoviesLatest
+  )
+  const { data: Upcoming, isLoading: isLoading3} = useQuery<IGetMoviesResult>(
+    ["movies", "Upcoming"],
+    getMoviesUpcoming
+  )
   return (
     <Wrapper>
-      {isLoading ? (
+      {isLoading && isLoading2 && isLoading3? (
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner data={data} />
-          <Slider data={data} />
-          <Modal data={data} />
+          <Banner data={Latest} />
+          <Slider data={topRated} />
+          <Modal data={topRated} />
+          {/* <Slider data={Latest} /> */}
+          {/* <Modal data={Latest} /> */}
+          {/* <Slider data={Upcoming} /> */}
+          {/* <Modal data={Upcoming} /> */}
         </>
       )}
     </Wrapper>

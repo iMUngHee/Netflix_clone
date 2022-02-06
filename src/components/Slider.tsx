@@ -3,18 +3,26 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IGetMoviesResult } from "../api/api";
 import { makeImagePath } from "../lib/utilities";
-import { Container, Info, Movie, Row } from "./style/Slider.style";
+import {
+  ButtonL,
+  ButtonR,
+  Container,
+  Info,
+  Movie,
+  Row,
+} from "./style/Slider.style";
+import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 
 const rowVariants = {
-  hidden: {
-    x: window.innerWidth + 5,
-  },
+  hidden: (isBack: boolean) => ({
+    x: isBack ? -window.innerWidth - 5 : window.innerWidth + 5,
+  }),
   visible: {
     x: 0,
   },
-  exit: {
-    x: -window.innerWidth - 5,
-  },
+  exit: (isBack: boolean) => ({
+    x: isBack ? window.innerWidth + 5 : -window.innerWidth - 5,
+  }),
 };
 
 const movieVariants = {
@@ -54,6 +62,7 @@ const Slider = ({ data }: ISlider) => {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
+  const [isBack, setIsBack] = useState(false);
   const deleteNullBackdropPath = (data: IGetMoviesResult) => {
     const update = { ...data };
     update.results.map((movie, idx) => {
@@ -68,19 +77,41 @@ const Slider = ({ data }: ISlider) => {
     if (data) {
       if (leaving) return;
       toggleLeaving();
+      setIsBack(false);
       const totalMovies = data.results.length - 1;
       const maxIndex = Math.floor(totalMovies / offset) - 1;
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
+  const decreaseIndex = () => {
+    if (data) {
+      if (leaving) return;
+      toggleLeaving();
+      setIsBack(true);
+      const totalMovies = data.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+    }
+  };
   const onBoxClicked = (movieID: number) => {
     navigate(`movies/${movieID}`);
   };
-  const toggleLeaving = () => setLeaving((prev) => !prev);
+  const toggleLeaving = () => {
+    // setIsBack((prev) => (prev ? false : true));
+    setLeaving((prev) => !prev);
+  };
   return (
     <Container>
-      <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+      <ButtonL onClick={decreaseIndex}>
+        <MdArrowBackIos />
+      </ButtonL>
+      <AnimatePresence
+        custom={isBack}
+        initial={false}
+        onExitComplete={toggleLeaving}
+      >
         <Row
+          custom={isBack}
           variants={rowVariants}
           initial="hidden"
           animate="visible"
@@ -110,6 +141,9 @@ const Slider = ({ data }: ISlider) => {
               ))}
         </Row>
       </AnimatePresence>
+      <ButtonR onClick={increaseIndex}>
+        <MdArrowForwardIos />
+      </ButtonR>
     </Container>
   );
 };

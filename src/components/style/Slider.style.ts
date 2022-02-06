@@ -4,6 +4,7 @@ import styled from "styled-components";
 export const Container = styled.div`
   position: relative;
   top: -100px;
+  padding: 0 2%;
 `;
 
 export const Row = styled(motion.div)`
@@ -12,7 +13,7 @@ export const Row = styled(motion.div)`
   gap: 5px;
   margin-bottom: 5px;
   position: absolute;
-  width: 100%;
+  width: 96%;
 `;
 
 export const Movie = styled(motion.div)<{ photo: string }>`
@@ -43,4 +44,23 @@ export const Info = styled(motion.div)`
     text-align: center;
     font-size: 10px;
   }
+`;
+
+const Button = styled.button`
+  background: none;
+  outline: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 40px;
+  position: absolute;
+  top: 100px;
+  z-index: 1000;
+`;
+
+export const ButtonL = styled(Button)`
+  left: 0.6%;
+`;
+export const ButtonR = styled(Button)`
+  right: 0.2%;
 `;

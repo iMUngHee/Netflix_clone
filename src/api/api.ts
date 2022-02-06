@@ -20,14 +20,31 @@ export interface IGetMoviesResult {
   total_results: number;
 }
 
-export const getMoviesNowPlaying = () => {
+export const getMoviesLatest = () => {
+  return fetch(
+    `${BASE_PATH}/movie/popular?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
+  ).then((response) => response.json());
+};
+
+export const getMoviesUpcoming = () => {
   return fetch(
     `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
   ).then((response) => response.json());
 };
 
-export const getMoviesPopular = () => {
+// TOP Rated Movies
+export const getMoviesTopRated = () => {
   return fetch(
-    `${BASE_PATH}/movie/popular?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
+    `${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
+  ).then((response) => response.json());
+};
+
+export interface IGetSearch {
+  query: string,
+}
+
+export const getSearchMulti = ({ query }: IGetSearch) => {
+  return fetch(
+    `${BASE_PATH}/search/multi?api_key=${API_KEY}&language=ko-KR&query=${query}&page=1&include_adult=false&region=kr`
   ).then((response) => response.json());
 };
