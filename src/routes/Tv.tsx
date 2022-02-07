@@ -68,19 +68,19 @@ const Tv = () => {
           <Contents>
             <ContentBox>
               <Title>평단의 찬사를 받은 시리즈</Title>
-              <Slider data={topRated} type="topRated" />
+              <Slider data={topRated} type="topRated" category="tv"/>
             </ContentBox>
             <ContentBox>
               <Title>취향 저격 인기 콘텐츠</Title>
-              <Slider data={popular} type="Popular" />
+              <Slider data={popular} type="Popular" category="tv"/>
             </ContentBox>
             <ContentBox>
               <Title>오늘 바로 방영! 콘텐츠</Title>
-              <Slider data={airingToday} type="AiringToday" />
+              <Slider data={airingToday} type="AiringToday" category="tv"/>
             </ContentBox>
             <ContentBox>
               <Title>NEW! 요즘 대세 콘텐츠</Title>
-              <Slider data={onTheAir} type="onTheAir" />
+              <Slider data={onTheAir} type="onTheAir" category="tv"/>
             </ContentBox>
           </Contents>
         </>

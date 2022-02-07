@@ -66,15 +66,15 @@ const Home = () => {
           <Contents>
             <ContentBox>
               <Title>평단의 찬사를 받은 영화</Title>
-              <Slider data={topRated} type="topRated" />
+              <Slider data={topRated} type="topRated" category="movie"/>
             </ContentBox>
             <ContentBox>
               <Title>지금 뜨는 콘텐츠</Title>
-              <Slider data={Latest} type="Latest" />
+              <Slider data={Latest} type="Latest" category="movie"/>
             </ContentBox>
             <ContentBox>
               <Title>NEW! 요즘 대세 콘텐츠</Title>
-              <Slider data={Upcoming} type="Upcoming" />
+              <Slider data={Upcoming} type="Upcoming" category="movie"/>
             </ContentBox>
           </Contents>
           <Modal data={topRated} type="topRated" />

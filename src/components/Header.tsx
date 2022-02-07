@@ -34,7 +34,7 @@ const Header = () => {
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useViewportScroll();
-  const homeMatch = useMatch("/");
+  const homeMatch = useMatch("/movie");
   const tvMatch = useMatch("/tv");
   const navigate = useNavigate();
   const {register, handleSubmit} = useForm<IForm>();
@@ -83,7 +83,7 @@ const Header = () => {
         </Logo>
         <Items>
           <Item>
-            <Link to="/">홈 {homeMatch && <Circle layoutId="circle" />}</Link>
+            <Link to="/movie">홈 {homeMatch && <Circle layoutId="circle" />}</Link>
           </Item>
           <Item>
             <Link to="/tv">

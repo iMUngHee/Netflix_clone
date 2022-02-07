@@ -58,9 +58,10 @@ const offset = 6;
 interface ISlider {
   data: IGetMoviesResult | IGetShowsResult | undefined;
   type: string;
+  category: string;
 }
 
-const Slider = ({ data, type }: ISlider) => {
+const Slider = ({ data, type, category }: ISlider) => {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);

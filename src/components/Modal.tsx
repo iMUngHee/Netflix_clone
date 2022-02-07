@@ -52,7 +52,8 @@ const infoVariants = {
 };
 
 const Modal = ({ data, type }: IModal) => {
-  const bigMovieMatch = useMatch(`/${type}/:movieId`);
+  const bigMovieMatch = useMatch(`/movie/${type}/:movieId`);
+  console.log(bigMovieMatch);
   const { scrollY } = useViewportScroll();
   const { data: detail } = useQuery<IGetMovieDetail>(
     ["movie", `Detail_${bigMovieMatch?.params.movieId}`],
@@ -67,7 +68,7 @@ const Modal = ({ data, type }: IModal) => {
     () => getMovieCredit(bigMovieMatch?.params.movieId)
   );
   const navigate = useNavigate();
-  const onOverlayClick = () => navigate("/");
+  const onOverlayClick = () => navigate("/movie");
   const clickedMovie =
     bigMovieMatch?.params.movieId &&
     data?.results.find(
