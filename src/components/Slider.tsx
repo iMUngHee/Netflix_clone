@@ -2,7 +2,7 @@ import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IGetMoviesResult } from "../api/api";
-import { makeImagePath } from "../lib/utilities";
+import { deleteNullBackdropPath, makeImagePath } from "../lib/utilities";
 import {
   ButtonL,
   ButtonR,
@@ -12,6 +12,7 @@ import {
   Row,
 } from "./style/Slider.style";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
+import { BsStarFill } from "react-icons/bs";
 
 const rowVariants = {
   hidden: (isBack: boolean) => ({
@@ -56,23 +57,14 @@ const offset = 6;
 
 interface ISlider {
   data: IGetMoviesResult | undefined;
+  type: string;
 }
 
-const Slider = ({ data }: ISlider) => {
+const Slider = ({ data, type }: ISlider) => {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [isBack, setIsBack] = useState(false);
-  const deleteNullBackdropPath = (data: IGetMoviesResult) => {
-    const update = { ...data };
-    update.results.map((movie, idx) => {
-      if (movie.backdrop_path === null) {
-        return update.results.splice(idx, 1);
-      }
-      return update;
-    });
-    return update;
-  };
   const increaseIndex = () => {
     if (data) {
       if (leaving) return;
@@ -94,12 +86,9 @@ const Slider = ({ data }: ISlider) => {
     }
   };
   const onBoxClicked = (movieID: number) => {
-    navigate(`movies/${movieID}`);
+    navigate(`${type}/${movieID}`);
   };
-  const toggleLeaving = () => {
-    // setIsBack((prev) => (prev ? false : true));
-    setLeaving((prev) => !prev);
-  };
+  const toggleLeaving = () => setLeaving((prev) => !prev);
   return (
     <Container>
       <ButtonL onClick={decreaseIndex}>
@@ -121,12 +110,12 @@ const Slider = ({ data }: ISlider) => {
         >
           {data &&
             { ...deleteNullBackdropPath(data) }.results
-              .slice(1)
+              .slice(0)
               .slice(offset * index, offset * index + offset)
               .map((movie) => (
                 <Movie
                   key={movie.id}
-                  layoutId={movie.id + ""}
+                  layoutId={`${movie.id}${type}`}
                   variants={movieVariants}
                   initial="normal"
                   whileHover="hover"
@@ -135,7 +124,13 @@ const Slider = ({ data }: ISlider) => {
                   onClick={() => onBoxClicked(movie.id)}
                 >
                   <Info variants={infoVariants}>
-                    <h4>{movie.title}</h4>
+                    <h4>
+                      {movie.title} ({movie.release_date.match(/^\d{4}/)})
+                    </h4>
+                    <span>
+                      <BsStarFill />
+                      {Number(movie.vote_average).toFixed(1)}
+                    </span>
                   </Info>
                 </Movie>
               ))}

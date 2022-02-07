@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   position: relative;
-  top: -100px;
+  top: -150px;
   padding: 0 2%;
 `;
 
@@ -35,14 +35,29 @@ export const Movie = styled(motion.div)<{ photo: string }>`
 
 export const Info = styled(motion.div)`
   padding: 20px;
-  background-color: ${(props) => props.theme.black.lighter};
+  background-color: rgba(0, 0, 0, 0.4);
   opacity: 0;
   position: absolute;
   width: 100%;
+  height: 100%;
   bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   h4 {
     text-align: center;
-    font-size: 10px;
+    font-size: 35px;
+    font-weight: bold;
+  }
+  span {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 20px;
+    color: #f1c40f;
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
 `;
 
