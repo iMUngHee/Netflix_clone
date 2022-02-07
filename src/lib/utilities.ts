@@ -4,7 +4,9 @@ export const makeImagePath = (id: string, format?: string) => {
   return `https://image.tmdb.org/t/p/${format ? format : "original"}/${id}`;
 };
 
-export const deleteNullBackdropPath = (data: IGetMoviesResult | IGetShowsResult) => {
+export const deleteNullBackdropPath = (
+  data: IGetMoviesResult | IGetShowsResult
+) => {
   const update = { ...data };
   update.results.map((movie, idx) => {
     if (movie.backdrop_path === null) {

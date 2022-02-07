@@ -12,7 +12,7 @@ import {
   IGetShowDetail,
   IGetShowsResult,
 } from "../api/api";
-import { makeImagePath } from "../lib/utilities";
+import { deleteNullBackdropPath, makeImagePath } from "../lib/utilities";
 import {
   Detail,
   DetailImg,
@@ -127,27 +127,30 @@ const Modal = ({ data, type, category }: IModal) => {
                 <DetailSimilarTitle>비슷한 콘텐츠</DetailSimilarTitle>
                 <DetailSimilar>
                   {similar?.total_pages !== 0 ? (
-                    similar?.results.slice(0, 8).map((movie) => (
-                      <DetailSimilarItem
-                        key={movie.id}
-                        photo={makeImagePath(movie.backdrop_path)}
-                      >
-                        <DetailSimilarItemInfo
-                          variants={infoVariants}
-                          initial="normal"
-                          whileHover="hover"
+                    similar &&
+                    { ...deleteNullBackdropPath(similar) }.results
+                      .slice(0, 8)
+                      .map((movie) => (
+                        <DetailSimilarItem
+                          key={movie.id}
+                          photo={makeImagePath(movie.backdrop_path)}
                         >
-                          <h4>
-                            {movie.name} (
-                            {movie.first_air_date.match(/^\d{4}/)})
-                          </h4>
-                          <span>
-                            <BsStarFill />
-                            {Number(movie.vote_average).toFixed(1)}
-                          </span>
-                        </DetailSimilarItemInfo>
-                      </DetailSimilarItem>
-                    ))
+                          <DetailSimilarItemInfo
+                            variants={infoVariants}
+                            initial="normal"
+                            whileHover="hover"
+                          >
+                            <h4>
+                              {movie.name} (
+                              {movie.first_air_date?.match(/^\d{4}/)})
+                            </h4>
+                            <span>
+                              <BsStarFill />
+                              {Number(movie.vote_average).toFixed(1)}
+                            </span>
+                          </DetailSimilarItemInfo>
+                        </DetailSimilarItem>
+                      ))
                   ) : (
                     <DetailSimilarSorry>
                       <FaGrinBeamSweat />
