@@ -1,9 +1,10 @@
 import { HashRouter, Route, Routes } from "react-router-dom";
 import Header from "../components/Header";
 import BlockMobile from "../lib/BlockMobile";
-import Home from "./Home";
+import Movie from "./Movie";
 import Tv from "./Tv";
 import Search from "./Search";
+import Home from "./Home";
 
 const Main = () => {
   return (
@@ -11,8 +12,9 @@ const Main = () => {
       <BlockMobile />
       <Header />
       <Routes>
-        <Route path="/movie" element={<Home />} />
-        <Route path="/movie/*" element={<Home />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/movie" element={<Movie />} />
+        <Route path="/movie/*" element={<Movie />} />
         <Route path="/tv" element={<Tv />} />
         <Route path="/tv/*" element={<Tv />} />
         <Route path="/search" element={<Search />} />

@@ -1,88 +1,56 @@
-import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import {
-  getMoviesLatest,
-  getMoviesTopRated,
-  getMoviesUpcoming,
-  IGetMoviesResult,
-} from "../api/api";
-import Banner from "../components/Banner";
-import Modal from "../components/Modal";
-import Slider from "../components/Slider";
 
-const Wrapper = styled.div`
-  background-color: black;
-  overflow-x: hidden;
-  padding-bottom: 200px;
-`;
-
-const Contents = styled.div`
+const Banner = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
+    url(https://assets.nflxext.com/ffe/siteui/vlv3/eb482c64-e879-4e88-9ddc-d839cb7d1232/df2916c4-fbc7-4814-8dc9-bf307b678808/KR-ko-20220131-popsignuptwoweeks-perspective_alpha_website_large.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   display: flex;
   flex-direction: column;
-  gap: 300px;
-`;
-
-const ContentBox = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Title = styled.div`
-  padding-left: 2%;
-  padding-bottom: 15px;
-  font-size: 35px;
-  font-weight: bold;
-  position: relative;
-  top: -150px;
-`;
-
-const Loader = styled.div`
-  height: 20vh;
-  display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  padding-top: 150px;
+  h1 {
+    font-size: 66px;
+    font-weight: bold;
+  }
+  h3 {
+    margin-top: 20px;
+    font-size: 20px;
+  }
+  h4 {
+    margin-top: 10px;
+    font-size: 15px;
+  }
+  span {
+    cursor: pointer;
+    margin-top: 30px;
+    background-color: ${(props) => props.theme.red.lighter};
+    padding: 10px 20px;
+    font-size: 30px;
+    border-radius: 5px;
+    font-weight: bold;
+    &:hover {
+      background-color: ${(props) => props.theme.red.darker};
+    }
+  }
 `;
 
 const Home = () => {
-  const { data: topRated, isLoading } = useQuery<IGetMoviesResult>(
-    ["movies", "TopRated"],
-    getMoviesTopRated
-  );
-  const { data: Latest, isLoading: isLoading2 } = useQuery<IGetMoviesResult>(
-    ["movies", "Latest"],
-    getMoviesLatest
-  );
-  const { data: Upcoming, isLoading: isLoading3 } = useQuery<IGetMoviesResult>(
-    ["movies", "Upcoming"],
-    getMoviesUpcoming
-  );
+  const navigate = useNavigate();
+  const onClick = () => navigate("/movie");
   return (
-    <Wrapper>
-      {isLoading && isLoading2 && isLoading3 ? (
-        <Loader>Loading...</Loader>
-      ) : (
-        <>
-          <Banner data={Latest} />
-          <Contents>
-            <ContentBox>
-              <Title>평단의 찬사를 받은 영화</Title>
-              <Slider data={topRated} type="topRated" category="movie"/>
-            </ContentBox>
-            <ContentBox>
-              <Title>지금 뜨는 콘텐츠</Title>
-              <Slider data={Latest} type="Latest" category="movie"/>
-            </ContentBox>
-            <ContentBox>
-              <Title>NEW! 요즘 대세 콘텐츠</Title>
-              <Slider data={Upcoming} type="Upcoming" category="movie"/>
-            </ContentBox>
-          </Contents>
-          <Modal data={topRated} type="topRated" category="movie"/>
-          <Modal data={Latest} type="Latest" category="movie"/>
-          <Modal data={Upcoming} type="Upcoming" category="movie"/>
-        </>
-      )}
-    </Wrapper>
+    <Banner>
+      <h1>영화와 시리즈를 무제한으로.</h1>
+      <h3>이 사이트는 넷플릭스 클론 사이트 입니다.</h3>
+      <h4> 넷플릭스 화이팅!</h4>
+      <span onClick={onClick}>시작하기 {">"}</span>
+    </Banner>
   );
 };
 
