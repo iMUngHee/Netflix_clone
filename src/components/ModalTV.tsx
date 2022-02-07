@@ -31,6 +31,7 @@ import {
   DetailTitle,
   Overlay,
 } from "./style/Modal.style";
+import NotFound from "../lib/NotFound";
 
 interface IModal {
   data: IGetShowsResult | undefined;
@@ -81,6 +82,7 @@ const Modal = ({ data, type, category }: IModal) => {
       return `${runtime}분`;
     }
   };
+  console.log(detail);
   return (
     <AnimatePresence>
       {bigMovieMatch ? (
@@ -94,71 +96,76 @@ const Modal = ({ data, type, category }: IModal) => {
             layoutId={`${bigMovieMatch.params.movieId}${type}`}
             scrolly={scrollY}
           >
-            {clickedMovie && (
-              <>
-                <DetailImg
-                  bgphoto={makeImagePath(clickedMovie.backdrop_path)}
-                />
-                <DetailTitle>{clickedMovie.name}</DetailTitle>
-                <DetailInfo>
-                  <DetailInfoRelease>
-                    {detail?.first_air_date.match(/^\d{4}/)}
-                  </DetailInfoRelease>
-                  <DetailInfoIsAdult isAdult={false}>
-                    <MdLocalMovies />
-                  </DetailInfoIsAdult>
-                  <DetailInfoRuntime>
-                    에피소드 런타임: {minuteToHour(detail?.episode_run_time)}
-                  </DetailInfoRuntime>
-                </DetailInfo>
-                <DetailRated>
-                  <BsStarFill />
-                  {Number(detail?.vote_average).toFixed(1)}
-                </DetailRated>
-                <DetailSubInfo>
-                  <span>
-                    출연: {cast?.cast.slice(0, 3).map((idx) => `${idx.name}. `)}
-                  </span>
-                  <span>
-                    장르: {detail?.genres.map((genre) => `${genre.name}. `)}
-                  </span>
-                </DetailSubInfo>
-                <DetailOverview>{clickedMovie.overview}</DetailOverview>
-                <DetailSimilarTitle>비슷한 콘텐츠</DetailSimilarTitle>
-                <DetailSimilar>
-                  {similar?.total_pages !== 0 ? (
-                    similar &&
-                    { ...deleteNullBackdropPath(similar) }.results
-                      .slice(0, 8)
-                      .map((movie) => (
-                        <DetailSimilarItem
-                          key={movie.id}
-                          photo={makeImagePath(movie.backdrop_path)}
-                        >
-                          <DetailSimilarItemInfo
-                            variants={infoVariants}
-                            initial="normal"
-                            whileHover="hover"
+            { detail?.first_air_date === null ? (
+              <NotFound />
+            ) : (
+              clickedMovie && (
+                <>
+                  <DetailImg
+                    bgphoto={makeImagePath(clickedMovie.backdrop_path)}
+                  />
+                  <DetailTitle>{clickedMovie.name}</DetailTitle>
+                  <DetailInfo>
+                    <DetailInfoRelease>
+                      {detail?.first_air_date.match(/^\d{4}/)}
+                    </DetailInfoRelease>
+                    <DetailInfoIsAdult isAdult={false}>
+                      <MdLocalMovies />
+                    </DetailInfoIsAdult>
+                    <DetailInfoRuntime>
+                      에피소드 런타임: {minuteToHour(detail?.episode_run_time)}
+                    </DetailInfoRuntime>
+                  </DetailInfo>
+                  <DetailRated>
+                    <BsStarFill />
+                    {Number(detail?.vote_average).toFixed(1)}
+                  </DetailRated>
+                  <DetailSubInfo>
+                    <span>
+                      출연:{" "}
+                      {cast?.cast.slice(0, 3).map((idx) => `${idx.name}. `)}
+                    </span>
+                    <span>
+                      장르: {detail?.genres.map((genre) => `${genre.name}. `)}
+                    </span>
+                  </DetailSubInfo>
+                  <DetailOverview>{clickedMovie.overview}</DetailOverview>
+                  <DetailSimilarTitle>비슷한 콘텐츠</DetailSimilarTitle>
+                  <DetailSimilar>
+                    {similar?.total_pages !== 0 ? (
+                      similar &&
+                      { ...deleteNullBackdropPath(similar) }.results
+                        .slice(0, 8)
+                        .map((movie) => (
+                          <DetailSimilarItem
+                            key={movie.id}
+                            photo={makeImagePath(movie.backdrop_path)}
                           >
-                            <h4>
-                              {movie.name} (
-                              {movie.first_air_date?.match(/^\d{4}/)})
-                            </h4>
-                            <span>
-                              <BsStarFill />
-                              {Number(movie.vote_average).toFixed(1)}
-                            </span>
-                          </DetailSimilarItemInfo>
-                        </DetailSimilarItem>
-                      ))
-                  ) : (
-                    <DetailSimilarSorry>
-                      <FaGrinBeamSweat />
-                      아직 시간이 더 필요해요...
-                    </DetailSimilarSorry>
-                  )}
-                </DetailSimilar>
-              </>
+                            <DetailSimilarItemInfo
+                              variants={infoVariants}
+                              initial="normal"
+                              whileHover="hover"
+                            >
+                              <h4>
+                                {movie.name} (
+                                {movie.first_air_date?.match(/^\d{4}/)})
+                              </h4>
+                              <span>
+                                <BsStarFill />
+                                {Number(movie.vote_average).toFixed(1)}
+                              </span>
+                            </DetailSimilarItemInfo>
+                          </DetailSimilarItem>
+                        ))
+                    ) : (
+                      <DetailSimilarSorry>
+                        <FaGrinBeamSweat />
+                        아직 시간이 더 필요해요...
+                      </DetailSimilarSorry>
+                    )}
+                  </DetailSimilar>
+                </>
+              )
             )}
           </Detail>
         </>

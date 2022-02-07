@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useQuery } from "react-query";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import {
   getSearchMovie,
@@ -11,6 +11,7 @@ import {
 import Modal from "../components/Modal";
 import ModalTV from "../components/ModalTV";
 import Slider from "../components/Slider";
+import NotFound from "../lib/NotFound";
 import { makeImagePath } from "../lib/utilities";
 
 const Wrapper = styled.div`
@@ -60,7 +61,6 @@ const Loader = styled.div`
 const Search = () => {
   const [search] = useSearchParams();
   const keyword = search.get("keyword");
-  const navigate = useNavigate();
   const {
     data: movies,
     isLoading: loadMovies,
@@ -74,17 +74,19 @@ const Search = () => {
     refetch: refetchTV,
   } = useQuery<IGetShowsResult>(["search", "tv"], () => getSearchShow(keyword));
   useEffect(() => {
-    if (keyword === null){
-      // navigate(-1);
+    if (keyword === null) {
       return;
     }
     refetchMovie();
     refetchTV();
   }, [keyword, refetchMovie, refetchTV]);
+  console.log(movies, tv);
   return (
     <Wrapper>
       {loadMovies && loadShows ? (
         <Loader>Loading...</Loader>
+      ) : tv?.total_results === 0 || movies?.total_results === 0 ? (
+        <NotFound />
       ) : (
         <>
           <Container
