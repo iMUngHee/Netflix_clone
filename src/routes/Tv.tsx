@@ -8,6 +8,7 @@ import {
   IGetShowsResult,
 } from "../api/api";
 import Banner from "../components/Banner";
+import ModalTV from "../components/ModalTV";
 import Slider from "../components/Slider";
 
 const Wrapper = styled.div`
@@ -83,6 +84,10 @@ const Tv = () => {
               <Slider data={onTheAir} type="onTheAir" category="tv"/>
             </ContentBox>
           </Contents>
+          <ModalTV data={topRated} type="topRated" category="tv"/>
+          <ModalTV data={popular} type="Popular" category="tv"/>
+          <ModalTV data={airingToday} type="AiringToday" category="tv"/>
+          <ModalTV data={onTheAir} type="OnTheAir" category="tv"/>
         </>
       )}
     </Wrapper>

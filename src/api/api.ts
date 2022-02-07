@@ -79,6 +79,13 @@ export const getMovieDetail = (movieId: string | undefined) => {
   ).then((response) => response.json());
 };
 
+// Similar Movies
+export const getMoviesSimilar = (movieId: string | undefined) => {
+  return fetch(
+    `${BASE_PATH}/movie/${movieId}/recommendations?api_key=${API_KEY}&language=ko-KR&page=1`
+  ).then((response) => response.json());
+};
+
 // Movie Credit
 interface ICast {
   id: number;
@@ -93,12 +100,6 @@ export const getMovieCredit = (movieId: string | undefined) => {
   ).then((response) => response.json());
 };
 
-// Similar Movies
-export const getMoviesSimilar = (movieId: string | undefined) => {
-  return fetch(
-    `${BASE_PATH}/movie/${movieId}/recommendations?api_key=${API_KEY}&language=ko-KR&page=1`
-  ).then((response) => response.json());
-};
 /**
  * TV Shows API
  */
@@ -147,6 +148,37 @@ export const getTvShowsTopRated = () => {
 export const getTvShowsOnTheAir = () => {
   return fetch(
     `${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
+  ).then((response) => response.json());
+};
+
+// TV Show Detail
+export interface IGetShowDetail {
+  homepage: string;
+  vote_average: string;
+  first_air_date: string;
+  tagline: string;
+  episode_run_time: string;
+  genres: IGenres[];
+  production_companies: ICompanies[];
+};
+
+export const getShowDetail = (movieId: string | undefined) => {
+  return fetch(
+    `${BASE_PATH}/tv/${movieId}?api_key=${API_KEY}&language=ko-KR`
+  ).then((response) => response.json());
+};
+
+// Similar Movies
+export const getShowSimilar = (movieId: string | undefined) => {
+  return fetch(
+    `${BASE_PATH}/tv/${movieId}/recommendations?api_key=${API_KEY}&language=ko-KR&page=1`
+  ).then((response) => response.json());
+};
+
+// Movie Credit
+export const getShowCredit = (movieId: string | undefined) => {
+  return fetch(
+    `${BASE_PATH}/tv/${movieId}/credits?api_key=${API_KEY}&language=ko-KR`
   ).then((response) => response.json());
 };
 

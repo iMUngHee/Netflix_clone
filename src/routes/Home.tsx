@@ -77,9 +77,9 @@ const Home = () => {
               <Slider data={Upcoming} type="Upcoming" category="movie"/>
             </ContentBox>
           </Contents>
-          <Modal data={topRated} type="topRated" />
-          <Modal data={Latest} type="Latest" />
-          <Modal data={Upcoming} type="Upcoming" />
+          <Modal data={topRated} type="topRated" category="movie"/>
+          <Modal data={Latest} type="Latest" category="movie"/>
+          <Modal data={Upcoming} type="Upcoming" category="movie"/>
         </>
       )}
     </Wrapper>

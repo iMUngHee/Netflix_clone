@@ -5,12 +5,12 @@ import { BsStarFill } from "react-icons/bs";
 import { FaGrinBeamSweat } from "react-icons/fa";
 import { useMatch, useNavigate } from "react-router-dom";
 import {
-  getMovieCredit,
-  getMovieDetail,
-  getMoviesSimilar,
+  getShowCredit,
+  getShowDetail,
+  getShowSimilar,
   ICredit,
-  IGetMovieDetail,
-  IGetMoviesResult,
+  IGetShowDetail,
+  IGetShowsResult,
 } from "../api/api";
 import { makeImagePath } from "../lib/utilities";
 import {
@@ -33,7 +33,7 @@ import {
 } from "./style/Modal.style";
 
 interface IModal {
-  data: IGetMoviesResult | undefined;
+  data: IGetShowsResult | undefined;
   type: string;
   category: string;
 }
@@ -55,17 +55,17 @@ const infoVariants = {
 const Modal = ({ data, type, category }: IModal) => {
   const bigMovieMatch = useMatch(`/${category}/${type}/:movieId`);
   const { scrollY } = useViewportScroll();
-  const { data: detail } = useQuery<IGetMovieDetail>(
-    ["movie", `Detail_${bigMovieMatch?.params.movieId}`],
-    () => getMovieDetail(bigMovieMatch?.params.movieId)
+  const { data: detail } = useQuery<IGetShowDetail>(
+    ["tv", `Detail_${bigMovieMatch?.params.movieId}`],
+    () => getShowDetail(bigMovieMatch?.params.movieId)
   );
-  const { data: similar } = useQuery<IGetMoviesResult>(
-    ["movie", `Similar_${bigMovieMatch?.params.movieId}`],
-    () => getMoviesSimilar(bigMovieMatch?.params.movieId)
+  const { data: similar } = useQuery<IGetShowsResult>(
+    ["tv", `Similar_${bigMovieMatch?.params.movieId}`],
+    () => getShowSimilar(bigMovieMatch?.params.movieId)
   );
   const { data: cast } = useQuery<ICredit>(
-    ["movie", `Credit_${bigMovieMatch?.params.movieId}`],
-    () => getMovieCredit(bigMovieMatch?.params.movieId)
+    ["tv", `Credit_${bigMovieMatch?.params.movieId}`],
+    () => getShowCredit(bigMovieMatch?.params.movieId)
   );
   const navigate = useNavigate();
   const onOverlayClick = () => navigate(`/${category}`);
@@ -99,16 +99,16 @@ const Modal = ({ data, type, category }: IModal) => {
                 <DetailImg
                   bgphoto={makeImagePath(clickedMovie.backdrop_path)}
                 />
-                <DetailTitle>{clickedMovie.title}</DetailTitle>
+                <DetailTitle>{clickedMovie.name}</DetailTitle>
                 <DetailInfo>
                   <DetailInfoRelease>
-                    {detail?.release_date.match(/^\d{4}/)}
+                    {detail?.first_air_date.match(/^\d{4}/)}
                   </DetailInfoRelease>
-                  <DetailInfoIsAdult isAdult={detail?.adult}>
+                  <DetailInfoIsAdult isAdult={false}>
                     <MdLocalMovies />
                   </DetailInfoIsAdult>
                   <DetailInfoRuntime>
-                    {minuteToHour(detail?.runtime)}
+                    에피소드 런타임: {minuteToHour(detail?.episode_run_time)}
                   </DetailInfoRuntime>
                 </DetailInfo>
                 <DetailRated>
@@ -138,7 +138,8 @@ const Modal = ({ data, type, category }: IModal) => {
                           whileHover="hover"
                         >
                           <h4>
-                            {movie.title} ({movie.release_date.match(/^\d{4}/)})
+                            {movie.name} (
+                            {movie.first_air_date.match(/^\d{4}/)})
                           </h4>
                           <span>
                             <BsStarFill />
