@@ -1,7 +1,6 @@
 const API_KEY = "55b1039fe0286596ce8075f0d6b12d9c";
 const BASE_PATH = "https://api.themoviedb.org/3";
 
-
 /**
  * Movies API
  */
@@ -126,25 +125,25 @@ export interface IGetShowsResult {
   total_results: number;
 }
 
-// Popular TV Shows 
+// Popular TV Shows
 export const getTvShowsPopular = () => {
   return fetch(
     `${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
   ).then((response) => response.json());
 };
-// Airing Today TV Shows 
+// Airing Today TV Shows
 export const getTvShowsAiringToday = () => {
   return fetch(
     `${BASE_PATH}/tv/airing_today?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
   ).then((response) => response.json());
 };
-// Top Rated TV Shows 
+// Top Rated TV Shows
 export const getTvShowsTopRated = () => {
   return fetch(
     `${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
   ).then((response) => response.json());
 };
-// On The Air Shows TV Shows 
+// On The Air Shows TV Shows
 export const getTvShowsOnTheAir = () => {
   return fetch(
     `${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
@@ -160,7 +159,7 @@ export interface IGetShowDetail {
   episode_run_time: string;
   genres: IGenres[];
   production_companies: ICompanies[];
-};
+}
 
 export const getShowDetail = (movieId: string | undefined) => {
   return fetch(
@@ -183,12 +182,13 @@ export const getShowCredit = (movieId: string | undefined) => {
 };
 
 // Get Search
-export interface IGetSearch {
-  query: string;
-}
-
-export const getSearchMulti = ({ query }: IGetSearch) => {
+export const getSearchMovie = ( query : string | null) => {
   return fetch(
-    `${BASE_PATH}/search/multi?api_key=${API_KEY}&language=ko-KR&query=${query}&page=1&include_adult=false&region=kr`
+    `${BASE_PATH}/search/movie?api_key=${API_KEY}&language=ko-KR&query=${query}&page=1&include_adult=false&region=kr`
+  ).then((response) => response.json());
+};
+export const getSearchShow = ( query : string | null) => {
+  return fetch(
+    `${BASE_PATH}/search/tv?api_key=${API_KEY}&language=ko-KR&query=${query}&page=1&include_adult=false&region=kr`
   ).then((response) => response.json());
 };

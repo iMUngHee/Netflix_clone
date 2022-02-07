@@ -2,7 +2,16 @@ import { motion, useAnimation, useViewportScroll } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useMatch, useNavigate } from "react-router-dom";
-import { Circle, Col, Items, Item ,Logo, Nav, Input, Search } from "./style/Hearder.style";
+import {
+  Circle,
+  Col,
+  Items,
+  Item,
+  Logo,
+  Nav,
+  Input,
+  Search,
+} from "./style/Hearder.style";
 
 const logoVariants = {
   normal: {
@@ -37,7 +46,7 @@ const Header = () => {
   const homeMatch = useMatch("/movie");
   const tvMatch = useMatch("/tv");
   const navigate = useNavigate();
-  const {register, handleSubmit} = useForm<IForm>();
+  const { register, handleSubmit } = useForm<IForm>();
   const toggleSearch = () => {
     if (searchOpen) {
       inputAnimation.start({
@@ -53,13 +62,14 @@ const Header = () => {
       if (scrollY.get() > 20) {
         navAnimation.start("scroll");
       } else {
-        navAnimation.start("top");
       }
+        navAnimation.start("top");
     });
   }, [scrollY, navAnimation]);
-  const onValid = ({keyword}: IForm) => {
+  const onValid = ({ keyword }: IForm) => {
     navigate(`/search?keyword=${keyword}`);
-  }
+    // setSearchParams(keyword);
+  };
   return (
     <Nav
       variants={navVariants}
@@ -83,7 +93,9 @@ const Header = () => {
         </Logo>
         <Items>
           <Item>
-            <Link to="/movie">홈 {homeMatch && <Circle layoutId="circle" />}</Link>
+            <Link to="/movie">
+              홈 {homeMatch && <Circle layoutId="circle" />}
+            </Link>
           </Item>
           <Item>
             <Link to="/tv">
@@ -113,7 +125,7 @@ const Header = () => {
             initial={{ scaleX: 0 }}
             transition={{ type: "linear" }}
             placeholder="제목, 사람, 장르"
-            {...register("keyword", {required: true, minLength: 2})}
+            {...register("keyword", { required: true, minLength: 2 })}
           />
         </Search>
       </Col>
