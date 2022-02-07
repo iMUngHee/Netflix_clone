@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useQuery } from "react-query";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import {
   getSearchMovie,
@@ -8,16 +8,28 @@ import {
   IGetMoviesResult,
   IGetShowsResult,
 } from "../api/api";
-import Banner from "../components/Banner";
 import Modal from "../components/Modal";
 import ModalTV from "../components/ModalTV";
 import Slider from "../components/Slider";
+import { makeImagePath } from "../lib/utilities";
 
 const Wrapper = styled.div`
   background-color: black;
   overflow-x: hidden;
   padding-bottom: 200px;
 `;
+
+export const Container = styled.div<{ bgphoto: string }>`
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
+    url(${(props) => props.bgphoto});
+  background-size: cover;
+`;
+
 const Contents = styled.div`
   display: flex;
   flex-direction: column;
@@ -48,36 +60,47 @@ const Loader = styled.div`
 const Search = () => {
   const [search] = useSearchParams();
   const keyword = search.get("keyword");
-  const { data: movies, isLoading: loadMovies , refetch: refetchMovie} = useQuery<IGetMoviesResult>(
-    ["search", "movie"],
-    () => getSearchMovie(keyword)
+  const navigate = useNavigate();
+  const {
+    data: movies,
+    isLoading: loadMovies,
+    refetch: refetchMovie,
+  } = useQuery<IGetMoviesResult>(["search", "movie"], () =>
+    getSearchMovie(keyword)
   );
-  const { data: tv, isLoading: loadShows, refetch: refetchTV } = useQuery<IGetShowsResult>(
-    ["search", "tv"],
-    () => getSearchShow(keyword)
-  );
+  const {
+    data: tv,
+    isLoading: loadShows,
+    refetch: refetchTV,
+  } = useQuery<IGetShowsResult>(["search", "tv"], () => getSearchShow(keyword));
   useEffect(() => {
-    if(keyword === null) return;
+    if (keyword === null){
+      // navigate(-1);
+      return;
+    }
     refetchMovie();
     refetchTV();
-  }, [keyword, refetchMovie, refetchTV])
+  }, [keyword, refetchMovie, refetchTV]);
   return (
     <Wrapper>
       {loadMovies && loadShows ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner data={movies} />
-          <Contents>
-            <ContentBox>
-              <Title>'{keyword}' 관련된 모든 영화</Title>
-              <Slider data={movies} type="movie" category="movie" />
-            </ContentBox>
-            <ContentBox>
-              <Title>'{keyword}' 관련된 모든 시리즈</Title>
-              <Slider data={tv} type="tv" category="tv" />
-            </ContentBox>
-          </Contents>
+          <Container
+            bgphoto={makeImagePath(movies?.results[0].backdrop_path || "")}
+          >
+            <Contents>
+              <ContentBox>
+                <Title>'{keyword}' 관련된 모든 영화</Title>
+                <Slider data={movies} type="movie" category="movie" />
+              </ContentBox>
+              <ContentBox>
+                <Title>'{keyword}' 관련된 모든 시리즈</Title>
+                <Slider data={tv} type="tv" category="tv" />
+              </ContentBox>
+            </Contents>
+          </Container>
           <Modal data={movies} type="movie" category="search" />
           <ModalTV data={tv} type="tv" category="search" />
         </>

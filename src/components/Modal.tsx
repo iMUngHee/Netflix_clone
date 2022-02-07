@@ -68,7 +68,7 @@ const Modal = ({ data, type, category }: IModal) => {
     () => getMovieCredit(bigMovieMatch?.params.movieId)
   );
   const navigate = useNavigate();
-  const onOverlayClick = () => navigate(`/${category}`);
+  const onOverlayClick = () => navigate(-1);
   const clickedMovie =
     bigMovieMatch?.params.movieId &&
     data?.results.find(
