@@ -1,7 +1,7 @@
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IGetMoviesResult } from "../api/api";
+import { IGetMoviesResult, IGetShowsResult } from "../api/api";
 import { deleteNullBackdropPath, makeImagePath } from "../lib/utilities";
 import {
   ButtonL,
@@ -56,7 +56,7 @@ const infoVariants = {
 const offset = 6;
 
 interface ISlider {
-  data: IGetMoviesResult | undefined;
+  data: IGetMoviesResult | IGetShowsResult | undefined;
   type: string;
 }
 
@@ -125,7 +125,11 @@ const Slider = ({ data, type }: ISlider) => {
                 >
                   <Info variants={infoVariants}>
                     <h4>
-                      {movie.title} ({movie.release_date.match(/^\d{4}/)})
+                      {movie.title || movie.name} (
+                      {movie.release_date === undefined
+                        ? movie.first_air_date?.match(/^\d{4}/)
+                        : movie.release_date.match(/^\d{4}/)}
+                      )
                     </h4>
                     <span>
                       <BsStarFill />

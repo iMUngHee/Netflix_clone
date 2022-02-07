@@ -1,6 +1,11 @@
 const API_KEY = "55b1039fe0286596ce8075f0d6b12d9c";
 const BASE_PATH = "https://api.themoviedb.org/3";
 
+
+/**
+ * Movies API
+ */
+
 interface IMovie {
   id: number;
   backdrop_path: string;
@@ -9,6 +14,8 @@ interface IMovie {
   overview: string;
   release_date: string;
   vote_average: string;
+  first_air_date?: string;
+  name?: string;
 }
 
 export interface IGetMoviesResult {
@@ -90,6 +97,56 @@ export const getMovieCredit = (movieId: string | undefined) => {
 export const getMoviesSimilar = (movieId: string | undefined) => {
   return fetch(
     `${BASE_PATH}/movie/${movieId}/recommendations?api_key=${API_KEY}&language=ko-KR&page=1`
+  ).then((response) => response.json());
+};
+/**
+ * TV Shows API
+ */
+interface IShows {
+  id: number;
+  backdrop_path: string;
+  poster_path: string;
+  name: string;
+  overview: string;
+  first_air_date: string;
+  vote_average: string;
+  title?: string;
+  release_date?: string;
+}
+
+export interface IGetShowsResult {
+  dates: {
+    maximum: string;
+    minimum: string;
+  };
+  page: number;
+  results: IShows[];
+  total_pages: number;
+  total_results: number;
+}
+
+// Popular TV Shows 
+export const getTvShowsPopular = () => {
+  return fetch(
+    `${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
+  ).then((response) => response.json());
+};
+// Airing Today TV Shows 
+export const getTvShowsAiringToday = () => {
+  return fetch(
+    `${BASE_PATH}/tv/airing_today?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
+  ).then((response) => response.json());
+};
+// Top Rated TV Shows 
+export const getTvShowsTopRated = () => {
+  return fetch(
+    `${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
+  ).then((response) => response.json());
+};
+// On The Air Shows TV Shows 
+export const getTvShowsOnTheAir = () => {
+  return fetch(
+    `${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
   ).then((response) => response.json());
 };
 
